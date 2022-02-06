@@ -21,21 +21,29 @@ struct MDPMonthYearPickerButton: View {
     @Binding var isPresented: Bool
     
     var body: some View {
-        Button( action: {withAnimation { isPresented.toggle()} } ) {
+        Button {
+			withAnimation {
+				isPresented.toggle()
+			}
+		} label: {
             HStack {
                 Text(monthDataModel.title)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(self.isPresented ? .accentColor : .black)
+                    .foregroundColor(self.isPresented ? .accentColor : .primary)
                 Image(systemName: "chevron.right")
                     .rotationEffect(self.isPresented ? .degrees(90) : .degrees(0))
             }
+			.font(.subheadline.weight(.semibold))
         }
     }
 }
 
 struct MonthYearPickerButton_Previews: PreviewProvider {
     static var previews: some View {
-        MDPMonthYearPickerButton(isPresented: .constant(false))
+		VStack(spacing: 16) {
+			MDPMonthYearPickerButton(isPresented: .constant(false))
+			MDPMonthYearPickerButton(isPresented: .constant(true))
+		}
+		.environmentObject(MDPModel(singleDay: .constant(Date()), includeDays: .allDays, minDate: nil, maxDate: nil))
+		.previewLayout(.fixed(width: 300, height: 300))
     }
 }

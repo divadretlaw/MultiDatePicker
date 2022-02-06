@@ -14,16 +14,14 @@ import SwiftUI
  * When a month or year is selected, the action parameter is invoked with the new values.
  */
 struct MDPMonthYearPicker: View {
-    let months = (0...11).map {$0}
-    let years = (1970...2099).map {$0}
-    
     var date: Date
     var action: (Int, Int) -> Void
     
-    @State private var selectedMonth = 0
-    @State private var selectedYear = 2020
+	@State private var selected = [1, Calendar.current.component(.year, from: Date())]
+	
+	var proxy: GeometryProxy?
     
-    init(date: Date, action: @escaping (Int, Int) -> Void) {
+	init(date: Date, proxy: GeometryProxy? = nil, action: @escaping (Int, Int) -> Void) {
         self.date = date
         self.action = action
         
@@ -31,34 +29,17 @@ struct MDPMonthYearPicker: View {
         let month = calendar.component(.month, from: date)
         let year = calendar.component(.year, from: date)
         
-        self._selectedMonth = State(initialValue: month - 1)
-        self._selectedYear = State(initialValue: year)
+		self._selected = State(initialValue: [month, year])
+		self.proxy = proxy
     }
     
     var body: some View {
-        HStack(alignment: .center, spacing: 0) {
-            Picker("", selection: self.$selectedMonth) {
-                ForEach(months, id: \.self) { month in
-                    Text("\(Calendar.current.monthSymbols[month])").tag(month)
-                }
-            }
-            .onChange(of: selectedMonth, perform: { value in
-                self.action(value + 1, self.selectedYear)
-            })
-            .frame(width: 150)
-            .clipped()
-            
-            Picker("", selection: self.$selectedYear) {
-                ForEach(years, id: \.self) { year in
-                    Text(String(format: "%d", year)).tag(year)
-                }
-            }
-            .onChange(of: selectedYear, perform: { value in
-                self.action(self.selectedMonth + 1, value)
-            })
-            .frame(width: 100)
-            .clipped()
-        }
+		HStack {
+			MonthYearPicker(selections: self.$selected)
+				.onChange(of: selected) { value in
+					self.action(value[0], value[1])
+				}
+		}
     }
 }
 

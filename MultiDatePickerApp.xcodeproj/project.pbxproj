@@ -17,7 +17,7 @@
 		321AB152255049EA00CE3EFC /* MultiDatePickerAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDatePickerAppApp.swift; sourceTree = "<group>"; };
 		321AB154255049EA00CE3EFC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		321AB15B255049EA00CE3EFC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		63CFDAF927AFF0C300229B73 /* MultiDatePicker */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MultiDatePicker; sourceTree = "<group>"; };
+		63CFDB0327AFFCBD00229B73 /* MultiDatePicker */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MultiDatePicker; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,7 +63,7 @@
 		63CFDAF427AFEFF600229B73 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				63CFDAF927AFF0C300229B73 /* MultiDatePicker */,
+				63CFDB0327AFFCBD00229B73 /* MultiDatePicker */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
