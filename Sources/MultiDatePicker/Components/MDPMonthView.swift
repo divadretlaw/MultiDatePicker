@@ -18,13 +18,7 @@ struct MDPMonthView: View {
     @State private var testDate = Date()
 	
 	private var animate = true
-	
-	private var cornerRadius: CGFloat = 10
-	
-	private var borderColor = Color.accentColor
-	private var borderWidth: CGFloat = 1
-	private var showBorder = true
-    
+
     private func showPrevMonth() {
 		if animate {
 			withAnimation {
@@ -49,8 +43,8 @@ struct MDPMonthView: View {
     }
     
     var body: some View {
-        VStack {
-			HStack(spacing: 30) {
+		VStack(spacing: 0) {
+			HStack(spacing: 25) {
                 MDPMonthYearPickerButton(isPresented: self.$showMonthYearPicker)
 				
                 Spacer()
@@ -71,7 +65,7 @@ struct MDPMonthView: View {
 						.imageScale(.large)
                 }
             }
-			.padding()
+			.padding(.horizontal, 8)
             
 			ZStack {
 				if showMonthYearPicker {
@@ -86,20 +80,7 @@ struct MDPMonthView: View {
 					.allowsHitTesting(!showMonthYearPicker)
 			}
         }
-        .background(
-            RoundedRectangle(cornerRadius: cornerRadius)
-				.fill(Color(.secondarySystemGroupedBackground))
-        )
-        .overlay(overlay)
     }
-	
-	@ViewBuilder
-	var overlay: some View {
-		if showBorder {
-			RoundedRectangle(cornerRadius: cornerRadius)
-				.stroke(borderColor, lineWidth: borderWidth)
-		}
-	}
 	
 	// MARK: Modifier
 	
@@ -108,26 +89,13 @@ struct MDPMonthView: View {
 		view.animate = value
 		return view
 	}
-	
-	func cornerRadius(_ value: CGFloat) -> Self {
-		var view = self
-		view.cornerRadius = value
-		return view
-	}
-	
-	func border(_ showBorder: Bool, color: Color = .accentColor, lineWidth: CGFloat = 1) -> Self {
-		var view = self
-		view.borderColor = color
-		view.borderWidth = lineWidth
-		view.showBorder = showBorder
-		return view
-	}
 }
 
 struct MonthView_Previews: PreviewProvider {
     static var previews: some View {
         MDPMonthView()
 			.padding()
+			.background(Color(.secondarySystemBackground))
 			.environmentObject(MDPModel(singleDay: .constant(Date(timeIntervalSinceNow: 123456)), includeDays: .allDays, minDate: nil, maxDate: nil))
 			.preferredColorScheme(.dark)
     }

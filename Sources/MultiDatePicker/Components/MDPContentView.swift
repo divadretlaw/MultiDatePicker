@@ -13,7 +13,7 @@ import SwiftUI
 struct MDPContentView: View {
     @EnvironmentObject var monthDataModel: MDPModel
     
-    let cellSize: CGFloat = 40
+    let cellSize: CGFloat = 42
     
     let columns = [
         GridItem(.flexible(minimum: 30, maximum: 60), spacing: 4),
@@ -26,14 +26,14 @@ struct MDPContentView: View {
     ]
     
     var body: some View {
-        LazyVGrid(columns: columns, spacing: 10) {
+        LazyVGrid(columns: columns, spacing: 8) {
             // Sun, Mon, etc.
             ForEach(0..<monthDataModel.dayNames.count, id: \.self) { index in
                 Text(monthDataModel.dayNames[index].uppercased())
 					.font(.caption.weight(.semibold))
 					.foregroundColor(Color(.tertiaryLabel))
             }
-            
+			
             // The actual days of the month.
             ForEach(0..<monthDataModel.days.count, id: \.self) { index in
                 if monthDataModel.days[index].day == 0 {
@@ -44,7 +44,7 @@ struct MDPContentView: View {
                 }
             }
         }
-		.padding(.bottom, 10)
+		.padding(.top, 16)
     }
 }
 

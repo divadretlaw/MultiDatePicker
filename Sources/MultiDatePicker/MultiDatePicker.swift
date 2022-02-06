@@ -51,12 +51,6 @@ public struct MultiDatePicker: View {
     @StateObject var monthModel: MDPModel
 	
 	private var animate = true
-	
-	private var cornerRadius: CGFloat = 10
-	
-	private var borderColor = Color.accentColor
-	private var borderWidth: CGFloat = 1
-	private var showBorder = true
         
     // selects only a single date
     
@@ -91,8 +85,6 @@ public struct MultiDatePicker: View {
     public var body: some View {
         MDPMonthView()
 			.animate(animate)
-			.cornerRadius(cornerRadius)
-			.border(showBorder, color: borderColor, lineWidth: borderWidth)
             .environmentObject(monthModel)
     }
 	
@@ -101,20 +93,6 @@ public struct MultiDatePicker: View {
 	public func animate(_ value: Bool) -> Self {
 		var view = self
 		view.animate = value
-		return view
-	}
-	
-	public func cornerRadius(_ value: CGFloat) -> Self {
-		var view = self
-		view.cornerRadius = value
-		return view
-	}
-	
-	public func border(_ showBorder: Bool, color: Color = .accentColor, lineWidth: CGFloat = 1) -> Self {
-		var view = self
-		view.borderColor = color
-		view.borderWidth = lineWidth
-		view.showBorder = showBorder
 		return view
 	}
 }

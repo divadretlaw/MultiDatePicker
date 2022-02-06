@@ -26,13 +26,13 @@ struct MDPMonthYearPickerButton: View {
 				isPresented.toggle()
 			}
 		} label: {
-            HStack {
+			HStack(spacing: 5) {
                 Text(monthDataModel.title)
                     .foregroundColor(self.isPresented ? .accentColor : .primary)
                 Image(systemName: "chevron.right")
                     .rotationEffect(self.isPresented ? .degrees(90) : .degrees(0))
             }
-			.font(.subheadline.weight(.semibold))
+			.font(.headline.weight(.semibold))
         }
     }
 }
