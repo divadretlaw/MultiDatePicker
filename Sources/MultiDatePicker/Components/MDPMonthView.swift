@@ -91,7 +91,6 @@ struct MDPMonthView: View {
 				.fill(Color(.secondarySystemGroupedBackground))
         )
         .overlay(overlay)
-        .padding()
     }
 	
 	@ViewBuilder
@@ -128,6 +127,7 @@ struct MDPMonthView: View {
 struct MonthView_Previews: PreviewProvider {
     static var previews: some View {
         MDPMonthView()
+			.padding()
 			.environmentObject(MDPModel(singleDay: .constant(Date(timeIntervalSinceNow: 123456)), includeDays: .allDays, minDate: nil, maxDate: nil))
 			.preferredColorScheme(.dark)
     }
