@@ -1,18 +1,14 @@
-# MultiDatePicker - A SwiftUI Component
-
-> Requires iOS 14, Xcode 12
+# MultiDatePicker
 
 Many applications have the need to pick a date. But what if you have an app that requires more than one date to be selected by the user? Perhaps you are writing a hotel reservation system or an employee scheduler and need the user to select starting and ending dates or just all the days they will be working this month. 
 
 This is where `MultiDataPicker` comes in. The standard Apple `DatePicker` lets you pick a single day. `MultiDatePicker` lets you pick a single day, a collection of days, or a date range. Its all in how you set up the component.
 
-The `ContentView` gives you examples of each type of selection mode `MultiDatePicker` is capable of. You need a variable to use for binding and then just use it:
-
-> I've updated the code to let the selection determine the calendar presented. Before this update, the selections would appear, but the calendar would always show the month/year for the current date. With this update, the calendar reflects the selection.
+The `ContentView` gives you examples of each type of selection mode `MultiDatePicker` is capable of. You need a variable to use for binding and then just use it.
 
 ### Single Day
 
-```
+```swift
 @State var selectedDate = Date()
 MultiDatePicker(singleDay: self.$selectedDate)
 ```
@@ -20,7 +16,7 @@ Whenever the user taps a date on the control's calendar the wrapped value will c
 
 ### Collection of Days
 
-```
+```swift
 @State var manyDays = [Date]()
 MultiDatePicker(anyDays: self.$manyDays)
 ```
@@ -31,7 +27,7 @@ The calendar in the control will reflect the first date in the array; otherwise 
 
 ### Date Range
 
-```
+```swift
 @State var range: ClosedRange<Date>? = nil
 MultiDatePicker(dateRange: self.$range)
 ```
@@ -43,18 +39,23 @@ The calendar in the control will show the month/year for the first day of the ra
 
 The `MultiDatePicker` has few other options you can pass into it to limit which days can be selected. 
 
-The `includeDays` parameter can be one of `.allDays` (the default), `weekendOnly`, or `weekdaysOnly`. For example if you pass `includeDays=.weekdaysOnly` then all weekend days appear gray and cannot be selected.
+The `includeDays` parameter can be one of `.allDays` (the default), `weekendOnly`, or `weekdaysOnly`. For example if you pass `includeDays = .weekdaysOnly` then all weekend days appear gray and cannot be selected.
 
 You can also set a `minDate` and/or a `maxDate` (both of which default to `nil`). Dates before `minDate` or after `maxDate` cannot be selected and appear gray.
 
-## Notes
+## Installation
 
-You can find out more on my blog at http://www.keaura.com/blog but basically:
+`MultiDatePicker` is a swift package - add it to Package.swift:
 
-- Download this repository
-- Build the app to test it out
-- Copy the MultiDatePicker folder into your app source
+```swift
+dependencies: [
+    .package(url: "https://github.com/divadretlaw/MultiDatePicker.git", from: "1.0.0"),
+],
+targets: [
+    .target(
+        name: "MyApp", // Where "MyApp" is the name of your app
+        dependencies: ["MultiDatePicker"]),
+]
+```
 
-I've put a bunch of comments throughout the code and it should be fairly easy to integrate.
-
-I hope you find this useful.
+Or, in Xcode, you can select File » Swift Packages » Add Package Dependency... and specify the repository URL `https://github.com/divadretlaw/MultiDatePicker.git` and "up to next major version" `1.0.0`.
