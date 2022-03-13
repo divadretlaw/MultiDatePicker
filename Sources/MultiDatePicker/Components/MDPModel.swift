@@ -5,8 +5,8 @@
 //  Created by Peter Ent on 11/2/20.
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
 
 /**
  * This model is used internally by the MultiDatePicker to coordinate what is displayed and what
@@ -22,10 +22,9 @@ import Combine
  * according to the type of selection required.
  */
 class MDPModel: NSObject, ObservableObject {
-    
     // the controlDate determines which month/year is being modeled. whenever it changes it
     // triggers a refresh of the days collection.
-    public var controlDate: Date = Date() {
+    public var controlDate = Date() {
         didSet {
             buildDays()
         }
@@ -43,17 +42,17 @@ class MDPModel: NSObject, ObservableObject {
     @Published var selections = [Date]()
     
     // the localized days of the week
-	var dayNames: [String] {
-		// Monday == 2
-		guard Calendar.autoupdatingCurrent.firstWeekday == 2 else {
-			return Calendar.autoupdatingCurrent.shortWeekdaySymbols
-		}
+    var dayNames: [String] {
+        // Monday == 2
+        guard Calendar.autoupdatingCurrent.firstWeekday == 2 else {
+            return Calendar.autoupdatingCurrent.shortWeekdaySymbols
+        }
 		
-		var weekdays = Calendar.autoupdatingCurrent.shortWeekdaySymbols
-		// Move Sunday to the end
-		weekdays.move(fromOffsets: [weekdays.startIndex], toOffset: weekdays.endIndex)
-		return weekdays
-	}
+        var weekdays = Calendar.autoupdatingCurrent.shortWeekdaySymbols
+        // Move Sunday to the end
+        weekdays.move(fromOffsets: [weekdays.startIndex], toOffset: weekdays.endIndex)
+        return weekdays
+    }
     
     // MARK: - PRIVATE VARS
     
@@ -62,8 +61,8 @@ class MDPModel: NSObject, ObservableObject {
     private var anyDatesWrapper: Binding<[Date]>?
     private var dateRangeWrapper: Binding<ClosedRange<Date>?>?
     
-    private var minDate: Date? = nil
-    private var maxDate: Date? = nil
+    private var minDate: Date?
+    private var maxDate: Date?
     
     // the type of date picker
     private var pickerType: MultiDatePicker.PickerType = .singleDay
@@ -90,7 +89,7 @@ class MDPModel: NSObject, ObservableObject {
         // set the controlDate to be the first of the anyDays if the
         // anyDays array is not empty.
         if let useDate = anyDays.wrappedValue.first {
-            controlDate = useDate
+            self.controlDate = useDate
         }
         buildDays()
     }
@@ -107,7 +106,7 @@ class MDPModel: NSObject, ObservableObject {
         setSelection(singleDay.wrappedValue)
         
         // set the controlDate to be this singleDay
-        controlDate = singleDay.wrappedValue
+        self.controlDate = singleDay.wrappedValue
         buildDays()
     }
     
@@ -124,7 +123,7 @@ class MDPModel: NSObject, ObservableObject {
         
         // set the selection to be the first in the range if the range exists
         if let dateRange = dateRange.wrappedValue {
-            controlDate = dateRange.lowerBound
+            self.controlDate = dateRange.lowerBound
         }
         buildDays()
     }
@@ -132,7 +131,7 @@ class MDPModel: NSObject, ObservableObject {
     // MARK: - PUBLIC
     
     func dayOfMonth(byDay: Int) -> MDPDayOfMonth? {
-        guard 1 <= byDay && byDay <= 31 else { return nil }
+        guard byDay >= 1, byDay <= 31 else { return nil }
         for dom in days {
             if dom.day == byDay {
                 return dom
@@ -146,7 +145,6 @@ class MDPModel: NSObject, ObservableObject {
         guard let date = day.date else { return }
         
         switch pickerType {
-        
         // just make the date the new selection
         case .singleDay:
             selections = [date]
@@ -172,7 +170,7 @@ class MDPModel: NSObject, ObservableObject {
             }
             selections.sort()
             if selections.count == 2 {
-                dateRangeWrapper?.wrappedValue = selections[0]...selections[1]
+                dateRangeWrapper?.wrappedValue = selections[0] ... selections[1]
             } else {
                 dateRangeWrapper?.wrappedValue = nil
             }
@@ -192,11 +190,10 @@ class MDPModel: NSObject, ObservableObject {
         } else {
             if selections.count == 0 {
                 return false
-            }
-            else if selections.count == 1 {
+            } else if selections.count == 1 {
                 return isSameDay(date1: selections[0], date2: date)
             } else {
-                let range = selections[0]...selections[1]
+                let range = selections[0] ... selections[1]
                 return range.contains(date)
             }
         }
@@ -224,13 +221,11 @@ class MDPModel: NSObject, ObservableObject {
             controlDate = newDate
         }
     }
-    
 }
 
 // MARK: - BUILD DAYS
 
 extension MDPModel {
-    
     private func buildDays() {
         let calendar = Calendar.current
         let year = calendar.component(.year, from: controlDate)
@@ -242,15 +237,15 @@ extension MDPModel {
         let range = calendar.range(of: .day, in: .month, for: date)!
         let numDays = range.count
         
-		var ord: Int {
-			// Monday == 2
-			guard calendar.firstWeekday == 2 else {
-				return calendar.component(.weekday, from: date)
-			}
-			let weekday = calendar.component(.weekday, from: date) - 1
-			// If Sunday then return 7
-			return weekday == 0 ? 7 : weekday
-		}
+        var ord: Int {
+            // Monday == 2
+            guard calendar.firstWeekday == 2 else {
+                return calendar.component(.weekday, from: date)
+            }
+            let weekday = calendar.component(.weekday, from: date) - 1
+            // If Sunday then return 7
+            return weekday == 0 ? 7 : weekday
+        }
         var index = 0
         
         let today = Date()
@@ -259,7 +254,7 @@ extension MDPModel {
         var daysArray = [MDPDayOfMonth]()
         
         // for 0 to ord, set the value in the array[index] to be 0, meaning no day here.
-        for _ in 1..<ord {
+        for _ in 1 ..< ord {
             daysArray.append(MDPDayOfMonth(index: index, day: 0))
             index += 1
         }
@@ -267,9 +262,9 @@ extension MDPModel {
         // for index in range, create a DayOfMonth that will represent one of the days
         // in the month. This object needs to be told if it is eligible for selection
         // which is based on the selectionType and min/max dates if present.
-        for i in 0..<numDays {
-            let realDate = calendar.date(from: DateComponents(year: year, month: month, day: i+1))
-            var dom = MDPDayOfMonth(index: index, day: i+1, date: realDate)
+        for i in 0 ..< numDays {
+            let realDate = calendar.date(from: DateComponents(year: year, month: month, day: i + 1))
+            var dom = MDPDayOfMonth(index: index, day: i + 1, date: realDate)
             dom.isToday = isSameDay(date1: today, date2: realDate)
             dom.isSelectable = isEligible(date: realDate)
             daysArray.append(dom)
@@ -283,21 +278,20 @@ extension MDPModel {
             remainder = 42 - total
         }
         
-        for _ in 0..<remainder {
+        for _ in 0 ..< remainder {
             daysArray.append(MDPDayOfMonth(index: index, day: 0))
             index += 1
         }
         
         self.numDays = numDays
-        self.title = "\(calendar.monthSymbols[month-1]) \(year)"
-        self.days = daysArray
+        title = "\(calendar.monthSymbols[month - 1]) \(year)"
+        days = daysArray
     }
 }
 
 // MARK: - UTILITIES
 
 extension MDPModel {
-    
     private func setSelection(_ date: Date) {
         pickerType = .singleDay
         selections = [date]
@@ -330,7 +324,7 @@ extension MDPModel {
         guard let date = date else { return true }
                 
         if let minDate = minDate, let maxDate = maxDate {
-            return (minDate...maxDate).contains(date)
+            return (minDate ... maxDate).contains(date)
         } else if let minDate = minDate {
             return date >= minDate
         } else if let maxDate = maxDate {
@@ -343,7 +337,7 @@ extension MDPModel {
             return ord == 1 || ord == 7
         case .weekdaysOnly:
             let ord = Calendar.current.component(.weekday, from: date)
-            return 1 < ord && ord < 7
+            return ord > 1 && ord < 7
         default:
             return true
         }

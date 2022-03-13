@@ -22,28 +22,28 @@ struct MDPMonthYearPickerButton: View {
     
     var body: some View {
         Button {
-			withAnimation {
-				isPresented.toggle()
-			}
-		} label: {
-			HStack(spacing: 5) {
+            withAnimation {
+                isPresented.toggle()
+            }
+        } label: {
+            HStack(spacing: 5) {
                 Text(monthDataModel.title)
                     .foregroundColor(self.isPresented ? .accentColor : .primary)
                 Image(systemName: "chevron.right")
                     .rotationEffect(self.isPresented ? .degrees(90) : .degrees(0))
             }
-			.font(.headline.weight(.semibold))
+            .font(.headline.weight(.semibold))
         }
     }
 }
 
 struct MonthYearPickerButton_Previews: PreviewProvider {
     static var previews: some View {
-		VStack(spacing: 16) {
-			MDPMonthYearPickerButton(isPresented: .constant(false))
-			MDPMonthYearPickerButton(isPresented: .constant(true))
-		}
-		.environmentObject(MDPModel(singleDay: .constant(Date()), includeDays: .allDays, minDate: nil, maxDate: nil))
-		.previewLayout(.fixed(width: 300, height: 300))
+        VStack(spacing: 16) {
+            MDPMonthYearPickerButton(isPresented: .constant(false))
+            MDPMonthYearPickerButton(isPresented: .constant(true))
+        }
+        .environmentObject(MDPModel(singleDay: .constant(Date()), includeDays: .allDays, minDate: nil, maxDate: nil))
+        .previewLayout(.fixed(width: 300, height: 300))
     }
 }
