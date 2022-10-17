@@ -1,5 +1,5 @@
 //
-//  MultiDatePicker.swift
+//  MultiDayPicker.swift
 //  MultiDatePickerApp
 //
 //  Created by Peter Ent on 11/3/20.
@@ -33,71 +33,60 @@ import SwiftUI
  *  - maxDate: Date? = nil
  *      Days after maxDate are not selectable.
  */
-@available(swift, obsoleted: 16.0, renamed: "MultiDayPicker")
-public struct MultiDatePicker: View {
+public struct MultiDayPicker: View {
+    // the type of picker, based on which init() function is used.
+    public enum PickerType {
+        case singleDay
+        case anyDays
+        case dateRange
+    }
+    
+    // lets all or some dates be elligible for selection.
+    public enum DateSelectionChoices {
+        case allDays
+        case weekendsOnly
+        case weekdaysOnly
+    }
+    
     @StateObject var monthModel: MDPModel
-	
+    
     private var animate = true
         
     // selects only a single date
     
-    @available(*, deprecated)
     public init(singleDay: Binding<Date>,
-                includeDays: MultiDayPicker.DateSelectionChoices = .allDays,
-                minDate: Date? = nil,
-                maxDate: Date? = nil) {
-        _monthModel = StateObject(wrappedValue: MDPModel(singleDay: singleDay, includeDays: includeDays, minDate: minDate, maxDate: maxDate))
-    }
-    
-    public init(singleDay: Binding<Date>,
-                includeDays: MultiDayPicker.DateSelectionChoices = .allDays) {
+                includeDays: DateSelectionChoices = .allDays) {
         _monthModel = StateObject(wrappedValue: MDPModel(singleDay: singleDay, includeDays: includeDays, minDate: nil, maxDate: nil))
     }
     
     public init(singleDay: Binding<Date>,
-                includeDays: MultiDayPicker.DateSelectionChoices = .allDays,
+                includeDays: DateSelectionChoices = .allDays,
                 in range: ClosedRange<Date>) {
         _monthModel = StateObject(wrappedValue: MDPModel(singleDay: singleDay, includeDays: includeDays, minDate: range.lowerBound, maxDate: range.upperBound))
     }
     
     // selects any number of dates, non-contiguous
     
-    @available(*, deprecated)
     public init(anyDays: Binding<[Date]>,
-                includeDays: MultiDayPicker.DateSelectionChoices = .allDays,
-                minDate: Date? = nil,
-                maxDate: Date? = nil) {
-        _monthModel = StateObject(wrappedValue: MDPModel(anyDays: anyDays, includeDays: includeDays, minDate: minDate, maxDate: maxDate))
-    }
-    
-    public init(anyDays: Binding<[Date]>,
-                includeDays: MultiDayPicker.DateSelectionChoices = .allDays) {
+                includeDays: DateSelectionChoices = .allDays) {
         _monthModel = StateObject(wrappedValue: MDPModel(anyDays: anyDays, includeDays: includeDays, minDate: nil, maxDate: nil))
     }
     
     public init(anyDays: Binding<[Date]>,
-                includeDays: MultiDayPicker.DateSelectionChoices = .allDays,
+                includeDays: DateSelectionChoices = .allDays,
                 in range: ClosedRange<Date>) {
         _monthModel = StateObject(wrappedValue: MDPModel(anyDays: anyDays, includeDays: includeDays, minDate: range.lowerBound, maxDate: range.upperBound))
     }
     
     // selects a closed date range
     
-    @available(*, deprecated)
     public init(dateRange: Binding<ClosedRange<Date>?>,
-                includeDays: MultiDayPicker.DateSelectionChoices = .allDays,
-                minDate: Date? = nil,
-                maxDate: Date? = nil) {
-        _monthModel = StateObject(wrappedValue: MDPModel(dateRange: dateRange, includeDays: includeDays, minDate: minDate, maxDate: maxDate))
-    }
-    
-    public init(dateRange: Binding<ClosedRange<Date>?>,
-                includeDays: MultiDayPicker.DateSelectionChoices = .allDays) {
+                includeDays: DateSelectionChoices = .allDays) {
         _monthModel = StateObject(wrappedValue: MDPModel(dateRange: dateRange, includeDays: includeDays, minDate: nil, maxDate: nil))
     }
     
     public init(dateRange: Binding<ClosedRange<Date>?>,
-                includeDays: MultiDayPicker.DateSelectionChoices = .allDays,
+                includeDays: DateSelectionChoices = .allDays,
                 in range: ClosedRange<Date>) {
         _monthModel = StateObject(wrappedValue: MDPModel(dateRange: dateRange, includeDays: includeDays, minDate: range.lowerBound, maxDate: range.upperBound))
     }
@@ -107,9 +96,9 @@ public struct MultiDatePicker: View {
             .animate(animate)
             .environmentObject(monthModel)
     }
-	
+    
     // MARK: Modifier
-	
+    
     public func animate(_ value: Bool) -> Self {
         var view = self
         view.animate = value
@@ -117,14 +106,14 @@ public struct MultiDatePicker: View {
     }
 }
 
-struct MultiDatePicker_Previews: PreviewProvider {
+struct MultiDayPicker_Previews: PreviewProvider {
     @State static var oneDay = Date()
     @State static var manyDates = [Date]()
     @State static var dateRange: ClosedRange<Date>? = nil
     
     static var previews: some View {
-        MultiDatePicker(dateRange: $dateRange)
-        MultiDatePicker(singleDay: $oneDay, includeDays: .weekdaysOnly)
-        MultiDatePicker(anyDays: $manyDates, includeDays: .weekendsOnly)
+        MultiDayPicker(dateRange: $dateRange)
+        MultiDayPicker(singleDay: $oneDay, includeDays: .weekdaysOnly)
+        MultiDayPicker(anyDays: $manyDates, includeDays: .weekendsOnly)
     }
 }

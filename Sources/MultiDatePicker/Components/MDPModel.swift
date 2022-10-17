@@ -22,6 +22,12 @@ import SwiftUI
  * according to the type of selection required.
  */
 class MDPModel: NSObject, ObservableObject {
+    private static var formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM y"
+        return formatter
+    }()
+    
     // the controlDate determines which month/year is being modeled. whenever it changes it
     // triggers a refresh of the days collection.
     public var controlDate = Date() {
@@ -65,10 +71,10 @@ class MDPModel: NSObject, ObservableObject {
     private var maxDate: Date?
     
     // the type of date picker
-    private var pickerType: MultiDatePicker.PickerType = .singleDay
+    private var pickerType: MultiDayPicker.PickerType = .singleDay
     
     // which days are available for selection
-    private var selectionType: MultiDatePicker.DateSelectionChoices = .allDays
+    private var selectionType: MultiDayPicker.DateSelectionChoices = .allDays
     
     // the actual number of days in this calendar month/year (eg, 28 for February)
     var numDays = 0
@@ -76,7 +82,7 @@ class MDPModel: NSObject, ObservableObject {
     // MARK: - INIT
     
     convenience init(anyDays: Binding<[Date]>,
-                     includeDays: MultiDatePicker.DateSelectionChoices,
+                     includeDays: MultiDayPicker.DateSelectionChoices,
                      minDate: Date?,
                      maxDate: Date?) {
         self.init()
@@ -95,7 +101,7 @@ class MDPModel: NSObject, ObservableObject {
     }
     
     convenience init(singleDay: Binding<Date>,
-                     includeDays: MultiDatePicker.DateSelectionChoices,
+                     includeDays: MultiDayPicker.DateSelectionChoices,
                      minDate: Date?,
                      maxDate: Date?) {
         self.init()
@@ -111,7 +117,7 @@ class MDPModel: NSObject, ObservableObject {
     }
     
     convenience init(dateRange: Binding<ClosedRange<Date>?>,
-                     includeDays: MultiDatePicker.DateSelectionChoices,
+                     includeDays: MultiDayPicker.DateSelectionChoices,
                      minDate: Date?,
                      maxDate: Date?) {
         self.init()
@@ -284,7 +290,7 @@ extension MDPModel {
         }
         
         self.numDays = numDays
-        title = "\(calendar.monthSymbols[month - 1]) \(year)"
+        title = MDPModel.formatter.string(from: controlDate)
         days = daysArray
     }
 }

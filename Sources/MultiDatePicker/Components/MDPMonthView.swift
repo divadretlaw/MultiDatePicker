@@ -15,7 +15,6 @@ struct MDPMonthView: View {
     @EnvironmentObject var monthDataModel: MDPModel
         
     @State private var showMonthYearPicker = false
-    @State private var testDate = Date()
 	
     private var animate = true
 
